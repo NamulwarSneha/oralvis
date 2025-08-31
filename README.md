@@ -1,70 +1,246 @@
-# Getting Started with Create React App
+# OralVis - Dental Care Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+OralVis is a comprehensive dental care management system that connects patients with dentists, enabling seamless appointment scheduling and health tracking.
 
-## Available Scripts
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Setup Instructions](#setup-instructions)
+- [Project Structure](#project-structure)
+- [Component Architecture](#component-architecture)
+- [Control Flow](#control-flow)
+- [Authentication Flow](#authentication-flow)
+- [Screenshots](#screenshots)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **User Authentication**
+  - Secure login and registration
+  - Role-based access (Patient/Dentist)
+  - Password visibility toggle
+  - Form validation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Patient Features**
+  - Register/Login as a user
+  - View list of available dentists
+  - Select dentist and request checkups
+  - View checkup results with images and notes
+  - Export checkup details to PDF
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Dentist Features**
+  - Register/Login as a dentist
+  - View list of patient checkup requests
+  - Upload multiple checkup photos
+  - Add detailed notes for each photo
+  - Save data to MongoDB
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend**
+  - React.js
+  - Tailwind CSS
+  - React Router
+  - React Icons
+  - Context API for state management
+  - jsPDF for PDF generation
+  - html2canvas for capturing components as images
+  - Custom NavLink for active navigation highlighting
 
-### `npm run build`
+- **Backend**
+  - Node.js
+  - Express.js
+  - MongoDB
+  - JWT Authentication
+  - Multer for file uploads
+  - bcrypt for password hashing
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Setup Instructions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Install Dependencies**
+   ```bash
+   # Install frontend dependencies
+   cd frontend
+   npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   # Install backend dependencies
+   cd ../backend
+   npm install
+   ```
 
-### `npm run eject`
+2. **Environment Setup**
+   - Create `.env` file in the backend directory:
+     ```
+     MONGODB_URI=your_mongodb_uri
+     JWT_SECRET=your_jwt_secret
+     PORT=5000
+     ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   - Create `.env` file in the frontend directory:
+     ```
+     REACT_APP_API_URL=http://localhost:5000
+     ```
+3. **Start the Application**
+   ```bash
+   # Start backend server
+   cd backend
+   npm start
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   # Start frontend development server
+   cd frontend
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Project Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+OralVis/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   │   ├── Login.js
+│   │   │   │   ├── Register.js
+│   │   │   │   └── ProtectedComponent.js
+│   │   │   ├── patient/
+│   │   │   │   ├── Dashboard.js
+│   │   │   │   ├── CheckupRequest.js
+│   │   │   │   ├── DentistList.js
+│   │   │   │   └── ExportPdf.js
+│   │   │   ├── dentist/
+│   │   │   │   ├── Dashboard.js
+│   │   │   │   ├── PatientRequest.js
+│   │   │   │   └── CheckupUpdate.js
+│   │   │   ├── layout/
+│   │   │   │   ├── Header.js
+│   │   │   │   └── Footer.js
+│   │   │   ├── Home.js
+│   │   │   ├── NotFound.js
+│   │   │   ├── CheckupHistory.js
+│   │   │   └── CheckupDetails.js
+│   │   ├── context/
+│   │   │   └── AuthContext.js
+│   │   ├── App.js
+│   │   ├── index.js
+│   │   └── index.css
+│   ├── package.json
+│   ├── tailwind.config.js
+│   └── postcss.config.js
+└── backend/
+    ├── routes/
+    │   ├── auth.js
+    │   ├── patient.js
+    │   └── dentist.js
+    ├── models/
+    │   ├── User.js
+    │   ├── Checkup.js
+    │   └── Image.js
+    ├── middleware/
+    │   └── auth.js
+    ├── uploads/
+    ├── server.js
+    └── package.json
+```
 
-## Learn More
+## Component Architecture
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Core Components
+- `Home.js`: Landing page with application overview and features
+- `NotFound.js`: 404 error page with navigation options
+- `CheckupHistory.js`: Shared component for viewing checkup history with filtering options
+- `CheckupDetails.js`: Shared component for displaying detailed checkup information
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Authentication Components
+- `Login.js`: User authentication form with email/password validation
+- `Register.js`: User registration form with role selection and form validation
+- `ProtectedComponent.js`: HOC for protecting routes based on authentication status
 
-### Code Splitting
+### Patient Components
+- `Dashboard.js`: 
+  - Overview of recent checkups
+  - Quick access to dentist list
+  - Pending requests status
+- `DentistList.js`:
+  - List of available dentists
+  - Filtering and search functionality
+  - Dentist profile preview
+- `CheckupRequest.js`:
+  - Form to request new checkups
+  - Date and time selection
+  - Reason for visit input
+- `ExportPdf.js`:
+  - PDF generation component
+  - Customizable layout
+  - Image and text formatting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Dentist Components
+- `Dashboard.js`:
+  - Overview of pending requests
+  - Recent checkups
+  - Quick statistics
+- `PatientRequests.js`:
+  - List of patient checkup requests
+  - Request details
+  - Status management
+- `CheckupUpdate.js`:
+  - Image upload interface
+  - Multiple image support
+  - Notes and description input
+  - Progress tracking
 
-### Analyzing the Bundle Size
+### Layout Components
+- `Header.js`:
+  - Navigation menu with active state highlighting
+  - User profile dropdown
+  - Role-based menu items
+- `NavLink.js`:
+  - Custom navigation link component
+  - Active state management
+  - Nested route support
+  - Consistent styling across desktop and mobile
+- `Footer.js`:
+  - Copyright information
+  - Quick links
+  - Contact information
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Control Flow
 
-### Making a Progressive Web App
+1. **User Authentication**
+   - User enters credentials
+   - Form validation occurs
+   - API call to backend
+   - JWT token generation
+   - Redirection based on role
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2. **Patient Checkup Flow**
+   - Patient views available dentists
+   - Selects dentist and requests checkup
+   - Receives confirmation
+   - Views checkup results with images
+   - Can export results to PDF
 
-### Advanced Configuration
+3. **Dentist Checkup Flow**
+   - Views pending checkup requests
+   - Uploads checkup photos
+   - Adds detailed notes
+   - Saves data to database
+   - Updates patient records
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Authentication Flow
 
-### Deployment
+1. **Registration**
+   ```
+   User Input → Form Validation → API Call → User Creation → JWT Generation → Login Redirect
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+2. **Login**
+   ```
+   User Input → Form Validation → API Call → Token Verification → Dashboard Redirect
+   ```
 
-### `npm run build` fails to minify
+3. **Protected Routes**
+   ```
+   Route Access → Token Check → Role Verification → Component Render
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#
